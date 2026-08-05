@@ -1,0 +1,19 @@
+# ERP - Software Architecture
+
+Este repositorio contiene la documentación de arquitectura para el sistema ERP, desarrollado como parte del taller de ciclo de vida de software.
+
+## Contenido
+
+- **Documentación arc42**: Arquitectura completa del sistema
+- **Diagramas**:
+  - Contexto (C1)
+  - Contenedores (C2)
+  - Secuencia
+  - Entidad-Relación
+
+## Enlaces
+
+- [Tablero en Notion](https://app.notion.ai/b2f4aad7d9d8b4bccb6d4afbf6c7a?t=3b2f4aad7d9d8b5bea4a0c7b8df1f7)
+- [Documentación arc42](./arc42-template-ES.md)
+- [Diagrama de Contexto](./images/C1_context.png)
+- [Diagrama de Contenedores](./images/c2_containers.png)
