@@ -18,27 +18,60 @@ Revisión de la plantilla: 7.0 ES (basada en asciidoc), Enero 2017
 arquitectura arc42, <https://www.arc42.org>. Creada por Dr. Peter
 Hruschka y Dr. Gernot Starke.
 
-# Introducción y Metas {#section-introduction-and-goals}
+# Introducción y Metas {#section-introduction-and-goals} 
 
-## Vista de Requerimientos {#_vista_de_requerimientos}
+El sistema ERP tiene como objetivo centralizar y automatizar los procesos de negocio de la empresa, comenzando por el módulo de compras.
 
-## Metas de Calidad {#_metas_de_calidad}
+## Vista de Requerimientos {#_vista_de_requerimientos} 
+
+### Requisitos de Negocio - Módulo de Compras:
+
+1. **Registrar Orden de Compra**: Permitir al Jefe de Compras crear órdenes con proveedores, productos y precios.
+2. **Aprobar Orden de Compra**: Autorizar órdenes pendientes y bloquear su edición.
+3. **Consultar Proveedores**: Buscar proveedores por nombre, RUC o rubro, y ver su calificación histórica.
+4. **Recepción de Mercadería**: Registrar la entrada de productos basada en una orden de compra aprobada.
+5. **Gestión de Devoluciones**: Manejar devoluciones de productos defectuosos o incorrectos.
+
+
+## Metas de Calidad {#_metas_de_calidad} 
+
+- **Rendimiento**: Las operaciones de búsqueda y registro deben responder en menos de 2 segundos.
+- **Seguridad**: Solo el Jefe de Compras puede aprobar órdenes.
+- **Trazabilidad**: Cada orden de compra debe tener un historial de cambios.
+- **Disponibilidad**: El sistema debe estar disponible el 99.9% del tiempo en horario laboral.
+
 
 ## Partes interesadas (Stakeholders) {#_partes_interesadas_stakeholders}
 
 +-------------+---------------------------+---------------------------+
-| Rol/Nombre  | Contacto                  | Expectativas              |
+| Rol/Nombre                  | Contacto                        | Expectativas              |
 +=============+===========================+===========================+
-| *           | *\<Contact-1\>*           | *\<Expectation-1\>*       |
-| \<Role-1\>* |                           |                           |
-+-------------+---------------------------+---------------------------+
-| *           | *\<Contact-2\>*           | *\<Expectation-2\>*       |
-| \<Role-2\>* |                           |                           |
-+-------------+---------------------------+---------------------------+
+| *   Jefe de Compras         | jefe.compras@empresa.com        | Gestionar y aprobar órdenes de compra      |
+| *   Almacenero              | almacen@empresa.com             | Registrar recepción de mercadería          |
+| *   Gerente General         | gerente@empresa.com             | Controlar los gastos y proveedores         |
+| *   Contabilidad            | contabilidad@empresa.com        | Recibir datos de facturas                  | 
 
-# Restricciones de la Arquitectura {#section-architecture-constraints}
 
-# Alcance y Contexto del Sistema {#section-context-and-scope}
+
+# Restricciones de la Arquitectura {#section-architecture-constraints 
+
+## Decisiones Tecnológicas
+
+- **Backend**: Java con Spring Boot (API REST).
+- **Frontend**: Single-Page Application (SPA) con React.
+- **Base de Datos**: PostgreSQL.
+- **Notificaciones**: Servicio SMTP para correos electrónicos.
+- **Control de Versiones**: Git y GitHub.
+- **Documentación**: Plantilla arc42 en formato Markdown.
+
+## Restricciones Técnicas
+
+- El sistema debe ser accesible desde navegadores web modernos (Chrome, Firefox, Edge).
+- La API debe ser RESTful y usar JSON para el intercambio de datos.
+- La base de datos debe tener respaldos automáticos diarios.
+- Las contraseñas deben estar encriptadas con BCrypt.
+
+# Alcance y Contexto del Sistema {#section-context-and-scope} 
 
 ## Contexto de Negocio {#_contexto_de_negocio}
 
@@ -54,17 +87,13 @@ El sistema ERP interactúa con los siguientes usuarios y sistemas externos:
 - **Sistema Contable**: Sistema externo para contabilidad y finanzas.
 - **Servicio de Email**: Envía notificaciones a proveedores.
 
-**\<Diagrama o Tabla\>**
-
-**\<optionally: Explanation of external domain interfaces\>**
-
 ## Contexto Técnico {#_contexto_técnico}
 
-**\<Diagrama o Tabla\>**
+El sistema se comunica mediante:
+- **HTTPS**: Para la comunicación entre el frontend y el backend.
+- **JDBC**: Para la conexión entre la API y la base de datos.
+- **SMTP**: Para el envío de notificaciones por correo electrónico.
 
-**\<Opcional: Explicación de las interfases técnicas\>**
-
-**\<Mapeo de Entrada/Salida a canales\>**
 
 # Estrategia de solución {#section-solution-strategy}
 
@@ -79,167 +108,82 @@ El sistema se compone de los siguientes contenedores:
 
 ### Componentes:
 
-| Contenedor | Tecnología | Descripción |
-|------------|------------|-------------|
-| Aplicación Web (SPA) | React, JavaScript | Interfaz de usuario |
-| API Monolítica | Java, Spring Boot | Lógica de negocio |
-| Base de Datos | PostgreSQL | Almacenamiento de datos |
+| Contenedor           | Tecnología        |    Descripción         |
+|------------..........|-------------------|------------------------|
+| Aplicación Web (SPA) | React, JavaScript | Interfaz de usuario    |
+| API Monolítica       | Java, Spring Boot | Lógica de negocio      |
+| Base de Datos        | PostgreSQL        | Almacenamiento de datos |
 
-***\<Diagrama general\>***
 
-Motivación
 
-:   *\<Explicación en texto\>*
 
-Bloques de construcción contenidos
 
-:   *\<Desripción de los bloques de construcción contenidos (Cajas
-    negras)\>*
+# Vista de Ejecución {#section-runtime-view} 
 
-Interfases importantes
+## Escenario: Registrar Orden de Compra
 
-:   *\<Descripción de las interfases importantes\>*
+El siguiente diagrama muestra el flujo de ejecución para registrar una orden de compra:
 
-### \<Caja Negra 1\> {#_caja_negra_1}
+![Diagrama de Secuencia](./images/secuencia_registrar_orden.png)
 
-*\<Propósito/Responsabilidad\>*
+### Flujo de Ejecución:
 
-*\<Interfase(s)\>*
+1. El Jefe de Compras rellena el formulario de orden de compra con proveedor, productos y precios.
+2. El frontend (SPA) valida los campos obligatorios (ej. proveedor no vacío).
+3. El frontend envía la petición POST a la API (`/api/ordenes-compra`).
+4. La API valida los datos recibidos.
+5. La API guarda la orden en la base de datos con estado "Pendiente".
+6. La base de datos retorna el ID de la orden creada.
+7. La API retorna la confirmación (201 Created) al frontend.
+8. El frontend muestra el mensaje de éxito al usuario con el número de orden.
 
-*\<(Opcional) Características de Calidad/Performance\>*
+### Escenario: Aprobar Orden de Compra
 
-*\<(Opcional) Ubicación Archivo/Directorio\>*
+1. El Jefe de Compras selecciona una orden en estado "Pendiente".
+2. El frontend envía la petición PUT a la API (`/api/ordenes-compra/{id}/aprobar`).
+3. La API verifica que el usuario tenga el rol "Jefe de Compras".
+4. La API cambia el estado de la orden a "Aprobada".
+5. La API envía una notificación al proveedor por correo electrónico.
+6. La API retorna la confirmación al frontend.
+7. El frontend muestra el mensaje de éxito.
 
-*\<(Opcional) Requerimientos Satisfechos\>*
 
-*\<(Opcional) Riesgos/Problemas/Incidentes Abiertos\>*
-
-### \<Caja Negra 2\> {#_caja_negra_2}
-
-*\<plantilla de caja negra\>*
-
-### \<Caja Negra N\> {#_caja_negra_n}
-
-*\<Plantilla de caja negra\>*
-
-### \<Interfase 1\> {#_interfase_1}
-
-...​
-
-### \<Interfase m\> {#_interfase_m}
-
-## Nivel 2 {#_nivel_2}
-
-### Caja Blanca *\<bloque de construcción 1\>* {#_caja_blanca_bloque_de_construcción_1}
-
-*\<plantilla de caja blanca\>*
-
-### Caja Blanca *\<bloque de construcción 2\>* {#_caja_blanca_bloque_de_construcción_2}
-
-*\<plantilla de caja blanca\>*
-
-...​
-
-### Caja Blanca *\<bloque de construcción m\>* {#_caja_blanca_bloque_de_construcción_m}
-
-*\<plantilla de caja blanca\>*
-
-## Nivel 3 {#_nivel_3}
-
-### Caja Blanca \<\_bloque de construcción x.1\_\> {#_caja_blanca_bloque_de_construcción_x_1}
-
-*\<plantilla de caja blanca\>*
-
-### Caja Blanca \<\_bloque de construcción x.2\_\> {#_caja_blanca_bloque_de_construcción_x_2}
-
-*\<plantilla de caja blanca\>*
-
-### Caja Blanca \<\_bloque de construcción y.1\_\> {#_caja_blanca_bloque_de_construcción_y_1}
-
-*\<plantilla de caja blanca\>*
-
-# Vista de Ejecución {#section-runtime-view}
-
-## \<Escenario de ejecución 1\> {#_escenario_de_ejecución_1}
-
--   *\<Inserte un diagrama de ejecución o la descripción del
-    escenario\>*
-
--   *\<Inserte la descripción de aspectos notables de las interacciones
-    entre los bloques de construcción mostrados en este diagrama.\>*
-
-## \<Escenario de ejecución 2\> {#_escenario_de_ejecución_2}
-
-## ...​
-
-## \<Escenario de ejecución n\> {#_escenario_de_ejecución_n}
 
 # Vista de Despliegue {#section-deployment-view}
 
-## Nivel de infraestructura 1 {#_nivel_de_infraestructura_1}
 
-***\<Diagrama General\>***
+## Nivel de Infraestructura
 
-Motivación
+El sistema se desplegará en un servidor en la nube con la siguiente configuración:
 
-:   *\<Explicación en forma textual\>*
+- **Aplicación Web (SPA)**: Alojada en un servidor web estático.
+- **API Monolítica**: Desplegada en un servidor con Java Runtime Environment (JRE).
+- **Base de Datos**: PostgreSQL en un servidor separado, con respaldos automáticos diarios.
 
-Características de Calidad/Rendimiento
+### Diagrama de Despliegue
 
-:   *\<Explicación en forma textual\>*
+[El diagrama de despliegue es opcional para este taller]
 
-    Mapeo de los Bloques de Construcción a Infraestructura
 
-    :   *\<Descripción del mapeo\>*
 
-## Nivel de Infraestructura 2 {#_nivel_de_infraestructura_2}
-
-### *\<Elemento de Infraestructura 1\>* {#_elemento_de_infraestructura_1}
-
-*\<diagrama + explicación\>*
-
-### *\<Elemento de Infraestructura 2\>* {#_elemento_de_infraestructura_2}
-
-*\<diagrama + explicación\>*
-
-...​
-
-### *\<Elemento de Infraestructura n\>* {#_elemento_de_infraestructura_n}
-
-*\<diagrama + explicación\>*
-
-# Conceptos Transversales (Cross-cutting) {#section-concepts}
-
-## *\<Concepto 1\>* {#_concepto_1}
-
-*\<explicación\>*
-
-## *\<Concepto 2\>* {#_concepto_2}
-
-*\<explicación\>*
-
-...​
-
-## *\<Concepto n\>* {#_concepto_n}
-
-*\<explicación\>*
-
-# Decisiones de Diseño {#section-design-decisions}
-
-# Requerimientos de Calidad {#section-quality-scenarios}
-
-## Árbol de Calidad {#_árbol_de_calidad}
-
-## Escenarios de calidad {#_escenarios_de_calidad}
-
-# Riesgos y deuda técnica {#section-technical-risks}
 
 # Glosario {#section-glossary}
 
++----------------------+-------------------------------------------------------------------------------------------------------------+
+|         Término                                                   | Definición                                                    |
++======================+=============================================================================================================+
+| * Orden de Compra (OC)      | * Documento formal que autoriza una compra a un proveedor.                                          |      
+| * Proveedor                 | * Entidad (persona o empresa) que suministra bienes o servicios a la empresa.                       |
+| * Producto                  | * Bien o servicio que se comercializa o utiliza en la empresa.                                      | 
+| * Jefe de Compras           | * Rol encargado de gestionar y aprobar las órdenes de compra.                                       |
+| * Almacenero                | * Rol encargado de recibir la mercadería y gestionar el inventario físico                           |
+| * Recepción de Mercadería   | * Proceso de ingreso físico de productos al almacén                                                 |
+| * Devolución                | * Proceso de retorno de productos defectuosos al proveedor                                          |
+| * Calificación de Proveedor | * Puntuación del proveedor basada en su desempeño y cumplimiento                                    |
+| * API                       | * Interfaz de Programación de Aplicaciones que permite la comunicación entre sistemas               |
+| * SPA                       | * Single-Page Application, aplicación web que carga una sola página y la actualiza dinámicamente    |
+
+
+
 +----------------------+-----------------------------------------------+
-| Término              | Definición                                    |
-+======================+===============================================+
-| *\<Término-1\>*      | *\<definicion-1\>*                            |
-+----------------------+-----------------------------------------------+
-| *\<Término-2\>*      | *\<definicion-2\>*                            |
-+----------------------+-----------------------------------------------+
+
