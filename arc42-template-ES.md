@@ -42,6 +42,18 @@ Hruschka y Dr. Gernot Starke.
 
 ## Contexto de Negocio {#_contexto_de_negocio}
 
+## Contexto de Negocio
+
+El sistema ERP interactúa con los siguientes usuarios y sistemas externos:
+
+![Diagrama de Contexto](./images/c1_context.png)
+
+### Actores:
+- **Jefe de Compras**: Gestiona órdenes, proveedores y devoluciones.
+- **Almacenero**: Registra la recepción de mercadería.
+- **Sistema Contable**: Sistema externo para contabilidad y finanzas.
+- **Servicio de Email**: Envía notificaciones a proveedores.
+
 **\<Diagrama o Tabla\>**
 
 **\<optionally: Explanation of external domain interfaces\>**
@@ -58,7 +70,20 @@ Hruschka y Dr. Gernot Starke.
 
 # Vista de Bloques {#section-building-block-view}
 
+
 ## Sistema General de Caja Blanca {#_sistema_general_de_caja_blanca}
+
+El sistema se compone de los siguientes contenedores:
+
+![Diagrama de Contenedores](./images/c2_containers.png)
+
+### Componentes:
+
+| Contenedor | Tecnología | Descripción |
+|------------|------------|-------------|
+| Aplicación Web (SPA) | React, JavaScript | Interfaz de usuario |
+| API Monolítica | Java, Spring Boot | Lógica de negocio |
+| Base de Datos | PostgreSQL | Almacenamiento de datos |
 
 ***\<Diagrama general\>***
 
