@@ -1,0 +1,21 @@
+@startuml
+actor "Jefe de Compras" as admin
+participant "SPA (Frontend)" as spa
+participant "API (Backend)" as api
+database "Base de Datos" as db
+
+admin -> spa: 1. Rellena formulario de OC
+activate spa
+spa -> spa: 2. Valida campos obligatorios
+spa -> api: 3. POST /api/ordenes-compra
+activate api
+api -> api: 4. Valida los datos
+api -> db: 5. INSERT INTO ordenes_compra
+activate db
+db --> api: 6. Retorna ID de la OC
+deactivate db
+api --> spa: 7. 201 Created
+deactivate api
+spa --> admin: 8. Muestra mensaje de éxito
+deactivate spa
+@enduml

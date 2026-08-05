@@ -1,0 +1,51 @@
+@startuml
+entity "Proveedor" {
+    * id_proveedor : integer <<PK>>
+    --
+    * razon_social : varchar(150)
+    * ruc : varchar(11)
+    contacto : varchar(100)
+    calificacion : decimal(2,1)
+}
+
+entity "Orden_Compra" {
+    * id_orden : integer <<PK>>
+    --
+    * numero_oc : varchar(20)
+    fecha_emision : date
+    estado : varchar(20)
+    * id_proveedor : integer <<FK>>
+}
+
+entity "Producto" {
+    * id_producto : integer <<PK>>
+    --
+    * nombre : varchar(100)
+    descripcion : text
+    unidad_medida : varchar(20)
+}
+
+entity "Detalle_Orden" {
+    * id_detalle : integer <<PK>>
+    --
+    * id_orden : integer <<FK>>
+    * id_producto : integer <<FK>>
+    cantidad : integer
+    precio_unitario : decimal(10,2)
+    cantidad_recibida : integer
+}
+
+entity "Devolucion" {
+    * id_devolucion : integer <<PK>>
+    --
+    * id_orden : integer <<FK>>
+    fecha : date
+    motivo : text
+    estado : varchar(20)
+}
+
+Proveedor "1" -- "0..*" Orden_Compra
+Orden_Compra "1" -- "1..*" Detalle_Orden
+Producto "1" -- "0..*" Detalle_Orden
+Orden_Compra "1" -- "0..1" Devolucion
+@enduml
