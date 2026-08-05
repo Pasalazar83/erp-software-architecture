@@ -1,0 +1,17 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(admin_compras, "Jefe de Compras", "Gestiona órdenes, proveedores y devoluciones.")
+Person(almacenero, "Almacenero", "Registra la recepción de mercadería.")
+
+System(erp, "Sistema ERP", "Gestiona los procesos de negocio.")
+
+System_Ext(contabilidad, "Sistema Contable", "Sistema para contabilidad y finanzas.")
+System_Ext(correo, "Servicio de Email", "Servicio para notificaciones.")
+
+Rel(admin_compras, erp, "Registra y aprueba órdenes de compra")
+Rel(almacenero, erp, "Registra la recepción de mercadería")
+
+Rel(erp, contabilidad, "Envía datos de facturas")
+Rel(erp, correo, "Envía notificaciones")
+@enduml
