@@ -75,7 +75,7 @@ El sistema ERP interactúa con los siguientes usuarios y sistemas externos:
 
 El sistema se compone de los siguientes contenedores:
 
-![Diagrama de Contenedores](./images/c2_containers.png)
+![Diagrama de Contexto](./images/c2_containers.png)
 
 ### Componentes:
 
